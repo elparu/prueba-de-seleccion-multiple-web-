@@ -1,1 +1,111 @@
+CSS
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
+body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #1b4332;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2d6a4f;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #d8f3dc;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #52b788;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #1b4332;
+}
+
+.card-result {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    border-left: 5px solid #2d6a4f;
+    display: none;
+}
+
+.card-result.error {
+    border-left-color: #d90429;
+    background-color: #fff0f3;
+    color: #d90429;
+}
+
+.card-result img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+    margin: 15px auto 0 auto;
+}
+
+.history {
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: #555;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.history ul {
+    list-style: square;
+    padding-left: 20px;
+    margin-top: 8px;
+}
