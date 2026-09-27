@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendador de Software Libre</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
+<div class="container">
+    <h1>Recomendador de Software Libre</h1>
+
+    <div class="form-group">
+        <label for="userName">Nombre del Estudiante:</label>
+        <input type="text" id="userName" placeholder="Ingresa tu nombre">
+    </div>
+
+    <div class="form-group">
+        <label for="activitySelect">Selecciona la actividad a realizar:</label>
+        <select id="activitySelect">
+            <option value="">-- Selecciona una opción --</option>
+            <option value="1">Procesar texto y redactar documentos</option>
+            <option value="2">Edición de fotografías e imágenes</option>
+            <option value="3">Edición de sonido y producción de audio</option>
+            <option value="4">Diseño gráfico e ilustración vectorial</option>
+            <option value="99">Opción no válida (Prueba de error)</option>
+        </select>
+    </div>
+
+    <button onclick="procesarSeleccion()">Obtener Recomendación</button>
+
+    <div id="resultCard" class="card-result"></div>
+
+    <div class="history">
+        <strong>Historial de consultas de <span id="savedUserName">Usuario</span>:</strong>
+        <ul id="historyList"></ul>
+    </div>
+</div>
+
+<script>
+    // Diccionario de respuestas (réplica de la estructura Java)
+    const catalogoSoftware = {
+        "1": {
+            nombre: "LibreOffice Writer",
+            descripcion: "Excelente alternativa libre a Microsoft Word para crear documentos, reportes e informes.",
+            imagen: "https://upload.wikimedia.org/wikipedia/commons/f/fb/LibreOffice_7.0_Writer_Icon.svg"
+        },
+        "2": {
+            nombre: "GIMP",
+            descripcion: "Programa potente para manipulación de imágenes, retoque fotográfico y composición digital.",
+            imagen: "https://upload.wikimedia.org/wikipedia/commons/4/45/The_GIMP_icon_-_Wilber_2022.svg"
+        },
+        "3": {
+            nombre: "Audacity",
+            descripcion: "Editor y grabador de audio multipista fácil de usar y muy versátil.",
+            imagen: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Audacity_Logo_2021.svg"
+        },
+        "4": {
+            nombre: "Inkscape",
+            descripcion: "Herramienta profesional para diseño vectorial (diagramas, logotipos e ilustraciones).",
+            imagen: "https://upload.wikimedia.org/wikipedia/commons/0/0a/Inkscape_logo_%282019%29.svg"
+        }
+    };
+
+    // Al cargar la página: Recuperar usuario de localStorage
+    window.onload = function() {
+        const usuarioGuardado = localStorage.getItem("estudiante_nombre");
+        if (usuarioGuardado) {
+            document.getElementById("userName").value = usuarioGuardado;
+            document.getElementById("savedUserName").innerText = usuarioGuardado;
+        }
+        actualizarHistorialPantalla();
+    };
+
+    function procesarSeleccion() {
+        const nombreInput = document.getElementById("userName").value.trim();
+        const seleccion = document.getElementById("activitySelect").value;
+        const resultCard = document.getElementById("resultCard");
+
+        // 1. Validar e ingresar usuario en localStorage
+        if (!nombreInput) {
+            alert("Por favor, ingresa tu nombre antes de continuar.");
+            return;
+        }
+        localStorage.setItem("estudiante_nombre", nombreInput);
+        document.getElementById("savedUserName").innerText = nombreInput;
+
+        // 2. Verificar la opción elegida
+        if (catalogoSoftware[seleccion]) {
+            const software = catalogoSoftware[seleccion];
+            
+            resultCard.className = "card-result";
+            resultCard.style.display = "block";
+            resultCard.innerHTML = `
+                <h3>Recomendación: ${software.nombre}</h3>
+                <p style="margin-top:8px;">${software.descripcion}</p>
+                <img src="${software.imagen}" alt="Logo de ${software.nombre}">
+            `;
+
+            guardarEnHistorial(`${nombreInput} consultó: ${software.nombre}`);
+        } else {
+            // Manejo cuando la opción no es válida o no existe
+            resultCard.className = "card-result error";
+            resultCard.style.display = "block";
+            resultCard.innerHTML = `
+                <h3>Opción no válida</h3>
+                <p>La opción ingresada no existe en nuestro catálogo. Por favor, selecciona una alternativa disponible.</p>
+            `;
+        }
+    }
+
+    function guardarEnHistorial(registro) {
+        let historial = JSON.parse(localStorage.getItem("estudiante_historial")) || [];
+        historial.push(registro);
+        localStorage.setItem("estudiante_historial", JSON.stringify(historial));
+        actualizarHistorialPantalla();
+    }
+
+    function actualizarHistorialPantalla() {
+        const historialList = document.getElementById("historyList");
+        let historial = JSON.parse(localStorage.getItem("estudiante_historial")) || [];
+        
+        historialList.innerHTML = "";
+        // Muestra los últimos 5 registros ordenados del más reciente al más antiguo
+        historial.slice(-5).reverse().forEach(entry => {
+            const li = document.createElement("li");
+            li.innerText = entry;
+            historialList.appendChild(li);
+        });
+    }
+</script>
+
+</body>
+</html>
